@@ -1,0 +1,40 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+
+    <link rel="stylesheet" href="css/bulma.min.css">
+
+    <script type="application/javascript" src="js/vue/vue.js"></script>
+    <script type="application/javascript" src="js/vue/components/table-drivers.js"></script>
+    <script type="application/javascript" src="js/vue/components/table-teams.js"></script>
+    <script type="application/javascript" src="js/jquery.min.js"></script>
+
+    <link rel="stylesheet" href="css/index.css">
+    <script type="application/javascript" src="js/index.js"></script>
+    <title></title>
+</head>
+<body>
+    <div id="app" class="container is-fluid">
+        <h1 class="title is-1 has-text-centered">Formula One Web API 2</h1>
+        <div class="columns">
+            <div class="column is-one-third"></div>
+            <div class="column is-one-third has-text-centered">
+                <button class="button is-link" v-on:click="request('teams')" v-bind:disabled="disableButtons">Teams</button>
+                <button class="button is-link" v-on:click="request('drivers')" v-bind:disabled="disableButtons">Drivers</button>
+            </div>
+            <div class="column is-one-third"></div>
+        </div> 
+        <div class="columns">
+            <div class="column is-1"></div>
+            <div class="column is-10">
+                <div class="table-container">
+                    <table-team v-bind:teams="data" v-if="dataRequired == 'teams'"></table-team>
+                    <table-drivers v-bind:drivers="data" v-if="dataRequired == 'drivers'"></table-drivers>
+                </div>
+            </div>
+            <div class="column is-1"></div>
+        </div>
+    </div>
+</body>
+</html>
