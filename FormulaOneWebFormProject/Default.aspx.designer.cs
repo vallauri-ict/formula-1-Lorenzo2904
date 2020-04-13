@@ -24,31 +24,31 @@ namespace FormulaOneWebFormProject
         protected global::System.Web.UI.HtmlControls.HtmlForm form1;
 
         /// <summary>
-        /// Controllo btnLoadCountries.
+        /// Controllo btnLoadCountry.
         /// </summary>
         /// <remarks>
         /// Campo generato automaticamente.
         /// Per la modifica, spostare la dichiarazione di campo dal file di progettazione al file code-behind.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.Button btnLoadCountries;
+        protected global::System.Web.UI.WebControls.Button btnLoadCountry;
 
         /// <summary>
-        /// Controllo btnLoadDrivers.
+        /// Controllo btnLoadTeam.
         /// </summary>
         /// <remarks>
         /// Campo generato automaticamente.
         /// Per la modifica, spostare la dichiarazione di campo dal file di progettazione al file code-behind.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.Button btnLoadDrivers;
+        protected global::System.Web.UI.WebControls.Button btnLoadTeam;
 
         /// <summary>
-        /// Controllo btnLoadTeams.
+        /// Controllo btnLoadDriver.
         /// </summary>
         /// <remarks>
         /// Campo generato automaticamente.
         /// Per la modifica, spostare la dichiarazione di campo dal file di progettazione al file code-behind.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.Button btnLoadTeams;
+        protected global::System.Web.UI.WebControls.Button btnLoadDriver;
 
         /// <summary>
         /// Controllo GridView1.
@@ -60,84 +60,21 @@ namespace FormulaOneWebFormProject
         protected global::System.Web.UI.WebControls.GridView GridView1;
 
         /// <summary>
-        /// Controllo idTeam.
+        /// Controllo GridView2.
         /// </summary>
         /// <remarks>
         /// Campo generato automaticamente.
         /// Per la modifica, spostare la dichiarazione di campo dal file di progettazione al file code-behind.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.Label idTeam;
+        protected global::System.Web.UI.WebControls.GridView GridView2;
 
         /// <summary>
-        /// Controllo nameTeam.
+        /// Controllo GridView3.
         /// </summary>
         /// <remarks>
         /// Campo generato automaticamente.
         /// Per la modifica, spostare la dichiarazione di campo dal file di progettazione al file code-behind.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.Label nameTeam;
-
-        /// <summary>
-        /// Controllo fullNameTeam.
-        /// </summary>
-        /// <remarks>
-        /// Campo generato automaticamente.
-        /// Per la modifica, spostare la dichiarazione di campo dal file di progettazione al file code-behind.
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.Label fullNameTeam;
-
-        /// <summary>
-        /// Controllo countryTeam.
-        /// </summary>
-        /// <remarks>
-        /// Campo generato automaticamente.
-        /// Per la modifica, spostare la dichiarazione di campo dal file di progettazione al file code-behind.
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.Label countryTeam;
-
-        /// <summary>
-        /// Controllo powerUnitTeam.
-        /// </summary>
-        /// <remarks>
-        /// Campo generato automaticamente.
-        /// Per la modifica, spostare la dichiarazione di campo dal file di progettazione al file code-behind.
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.Label powerUnitTeam;
-
-        /// <summary>
-        /// Controllo technicalChiefTeam.
-        /// </summary>
-        /// <remarks>
-        /// Campo generato automaticamente.
-        /// Per la modifica, spostare la dichiarazione di campo dal file di progettazione al file code-behind.
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.Label technicalChiefTeam;
-
-        /// <summary>
-        /// Controllo chassisTeam.
-        /// </summary>
-        /// <remarks>
-        /// Campo generato automaticamente.
-        /// Per la modifica, spostare la dichiarazione di campo dal file di progettazione al file code-behind.
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.Label chassisTeam;
-
-        /// <summary>
-        /// Controllo nameFirstTeam.
-        /// </summary>
-        /// <remarks>
-        /// Campo generato automaticamente.
-        /// Per la modifica, spostare la dichiarazione di campo dal file di progettazione al file code-behind.
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.Label nameFirstTeam;
-
-        /// <summary>
-        /// Controllo nameSecondDriver.
-        /// </summary>
-        /// <remarks>
-        /// Campo generato automaticamente.
-        /// Per la modifica, spostare la dichiarazione di campo dal file di progettazione al file code-behind.
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.Label nameSecondDriver;
+        protected global::System.Web.UI.WebControls.GridView GridView3;
     }
 }

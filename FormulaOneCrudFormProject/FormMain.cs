@@ -14,8 +14,8 @@ namespace FormulaOneCrudFormProject
 {
     public partial class FormMain : Form
     {
-        private DbTools db;
-        private BindingList<Team> teams;
+        DbTools db;
+        BindingList<Team> teams;
 
         public FormMain()
         {
@@ -25,24 +25,41 @@ namespace FormulaOneCrudFormProject
         private void FormMain_Load(object sender, EventArgs e)
         {
             db = new DbTools();
-            teams = new BindingList<Team>(db.Teams);
+            db.GetTeams();
+            //teams = new BindingList<Team>(db.Teams);
+            
             listBoxTeam.DataSource = teams;
+
+            cmbCountry.DataSource = new BindingSource(db.Countries, null);
+            cmbCountry.DisplayMember = "Value";
+            cmbCountry.ValueMember = "Key";
+
+            cmbFirstDriver.DataSource = new BindingSource(db.Drivers, null);
+            cmbFirstDriver.DisplayMember = "Value";
+            cmbFirstDriver.ValueMember = "Key";
+
+            cmbSecondDriver.DataSource = new BindingSource(db.Drivers, null);
+            cmbSecondDriver.DisplayMember = "Value";
+            cmbSecondDriver.ValueMember = "Key";
         }
 
-        private void btnTest_Click(object sender, EventArgs e)
+        private void listBoxTeam_SelectedValueChanged(object sender, EventArgs e)
         {
-            string path = @"%userprofile%\OneDrive\Desktop\teams.json";
-            path = Environment.ExpandEnvironmentVariables(path);
-            if (db.SerializeToJSON<Team>(teams.ToList(), path))
-                MessageBox.Show("Operazione completata con successo.", Text, MessageBoxButtons.OK, MessageBoxIcon.Information);
-            else
-                MessageBox.Show("Operazione fallita.", Text, MessageBoxButtons.OK, MessageBoxIcon.Error);
+            Team sel = (Team)listBoxTeam.SelectedItem;
+            txtFullTeamName.Text = sel.FullTeamName;
+            cmbCountry.SelectedValue = sel.Country.CountryCode;
+            txtPowerUnit.Text = sel.PowerUnit;
+            txtTechnicalChief.Text = sel.TechnicalChief;
+            txtChassis.Text = sel.Chassis;
+            cmbFirstDriver.SelectedValue = sel.FirstDriver.ID;
+            cmbSecondDriver.SelectedValue = sel.SecondDriver.ID;
         }
 
-        private void listBoxTeam_SelectedIndexChanged(object sender, EventArgs e)
+        private void stampaToolStripTeamButton_Click(object sender, EventArgs e)
         {
-            //string s = listBoxTeam.SelectedItem.ToString().Split('(')[0].Trim();
-            //Team team = teams.ToList().Find(t => t.Name == s);
+            Utils.SerializeToCsv(teams, @".\Teams.csv");
+
+            Utils.SerializeToJson(teams, @".\Teams.json");
         }
     }
 }

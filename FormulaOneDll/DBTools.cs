@@ -1,153 +1,111 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data.SqlClient;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-
-using System.Data.SqlClient;
-using System.IO;
-
-// Cercare questi pacchetti su nuget
-using Microsoft.SqlServer.Management.Common;
-using Microsoft.SqlServer.Management.Smo;
-using System.ComponentModel;
-
-using Newtonsoft.Json;
 
 namespace FormulaOneDll
 {
     public class DbTools
     {
-        private const string WORKINGPATH = @"D:\Dati\";
-        private const string CONNECTION_STRING = @"Data Source=(LocalDB)\MSSQLLocalDB;AttachDbFilename=D:\Dati\FormulaOne.mdf;Integrated Security=True";
+        public const string WORKINGPATH = @"D:\5B\INFO\FormulaOneSolution\Dati\";
+        private const string CONNECTION_STRING = @"Data Source=(LocalDB)\MSSQLLocalDB;AttachDbFilename="+WORKINGPATH+@"FormulaOne.mdf;Integrated Security=True";
 
         private Dictionary<int, Driver> drivers;
         private Dictionary<string, Country> countries;
-        private List<Team> teams;
+        private Dictionary<int, Team> teams;
 
-        public Dictionary<int, Driver> Drivers
+        public Dictionary<int, Driver> Drivers { get => drivers; set => drivers = value; }
+        public Dictionary<string, Country> Countries { get => countries; set => countries = value; }
+        public Dictionary<int, Team> Teams { get => teams; set => teams = value; }
+
+        public void ExecuteSqlScript(string sqlScriptName)
         {
-            get
-            {
-                if (this.drivers == null || this.drivers.Count == 0)
-                    this.GetDrivers();
-                return this.drivers;
-            }
-            set => drivers = value;
-        }
-        public Dictionary<string, Country> Countries
-        {
-            get
-            {
-                if (this.countries == null)
-                    this.GetCountries();
-                return this.countries;
-            }
-            set => countries = value;
-        }
-        public List<Team> Teams
-        {
-            get
-            {
-                if (teams == null || teams.Count == 0)
-                    this.LoadTeams();
-                return teams;
-            }
-            set => teams = value;
-        }
+            var fileContent = File.ReadAllText(WORKINGPATH + sqlScriptName);
+            fileContent = fileContent.Replace("\r\n", "");
+            fileContent = fileContent.Replace("\r", "");
+            fileContent = fileContent.Replace("\n", "");
+            fileContent = fileContent.Replace("\t", "");
+            var sqlqueries = fileContent.Split(new[] { ";" }, StringSplitOptions.RemoveEmptyEntries);
 
-        //public void CreateCountriesWithSmo()
-        //{
-        //    string sqlConnectionString = @"Data Source = (localdb)\MSSQLLocalDB; 
-        //        AttachDbFilename =C:\Users\loren\OneDrive\Desktop\_Scuola\2019-2020\INFORMATICA\CAMBIERI\FormulaOneSolution\FormulaOne.mdf; Integrated Security = True";
-        //    FileInfo file = new FileInfo(@"Countries.sql");
-        //    string script = file.OpenText().ReadToEnd();
-        //    SqlConnection conn = new SqlConnection(sqlConnectionString);
-        //    Server server = new Server(new ServerConnection(conn));
-
-        //    try
-        //    {
-        //        server.ConnectionContext.ExecuteNonQuery(script);
-        //        file.OpenText().Close();
-        //        conn.Close();
-        //        Console.WriteLine("CreateCountries: SUCCESS");
-        //    }
-        //    catch (Exception ex)
-        //    {
-        //        Console.WriteLine("Error: " + ex);
-        //    }
-        //}
-
-        public void ExecuteSqlScript(string sqlScriptPath)
-        {
-            var fileContent = File.ReadAllText($"{WORKINGPATH}{sqlScriptPath}");
-            fileContent = fileContent
-                .Replace("\r\n", "")
-                .Replace("\r", "")
-                .Replace("\n", "")
-                .Replace("\t", "");
-            var sqlQueries = fileContent.Split(new[] { ";" }, StringSplitOptions.RemoveEmptyEntries);
-
-            var con = new SqlConnection($@"Data Source=(LocalDB)\MSSQLLocalDB;AttachDbFilename={WORKINGPATH}FormulaOne.mdf;Integrated Security=True");
+            var con = new SqlConnection(CONNECTION_STRING);
             var cmd = new SqlCommand("query", con);
-            con.Open();
-            foreach (var query in sqlQueries)
+            con.Open(); int i = 0;
+            foreach (var query in sqlqueries)
             {
-                cmd.CommandText = query;
+                cmd.CommandText = query; i++;
                 try
                 {
                     cmd.ExecuteNonQuery();
                 }
-                catch (SqlException ex)
+                catch (SqlException err)
                 {
-                    Console.WriteLine($"Errore in esecuzione della query numero: {ex.LineNumber}");
-                    Console.WriteLine($"Errore: {ex.Number} {ex.Message}");
+                    Console.WriteLine("Errore in esecuzione della query numero: " + i);
+                    Console.WriteLine("\tErrore SQL: " + err.Number + " - " + err.Message);
                 }
             }
             con.Close();
-            con.Dispose();
-            SqlConnection.ClearAllPools();
         }
 
-        //public void MakeBackup()
-        //{
-        //    StreamReader sr = new StreamReader($"{WORKINGPATH}FormulaOne.mdf");
-        //    StreamWriter sw = new StreamWriter($"{WORKINGPATH}FormulaOneBackup.mdf");
-        //    sw.Write(sr.ReadToEnd());
-        //    sr.Close();
-        //    sw.Close();
-        //}
-        //public void Restore()
-        //{
-        //    StreamReader sr = new StreamReader($"{WORKINGPATH}FormulaOneBackup.mdf");
-        //    StreamWriter sw = new StreamWriter($"{WORKINGPATH}FormulaOne.mdf");
-        //    sw.Write(sr.ReadToEnd());
-        //    sr.Close();
-        //    sw.Close();
-        //}
+        public void DropTable(string tableName)
+        {
+            var con = new SqlConnection(CONNECTION_STRING);
+            var cmd = new SqlCommand("Drop Table " + tableName + ";", con);
+            con.Open();
+            try
+            {
+                cmd.ExecuteNonQuery();
+            }
+            catch (SqlException err)
+            {
+                Console.WriteLine("\tErrore SQL: " + err.Number + " - " + err.Message);
+            }
+            con.Close();
+        }
 
-        //public void DropTable(string tableName)
-        //{
-        //    var con = new SqlConnection($@"Data Source=(LocalDB)\MSSQLLocalDB;AttachDbFilename={WORKINGPATH}FormulaOne.mdf;Integrated Security=True");
-        //    var cmd = new SqlCommand($"Drop Table {tableName};", con);
-        //    con.Open();
-        //    try
-        //    {
-        //        cmd.ExecuteNonQuery();
-        //    }
-        //    catch (SqlException ex)
-        //    {
-        //        Console.WriteLine($"Errore: {ex.Number} {ex.Message}");
-        //    }
-        //    con.Close();
-        //    con.Dispose();
-        //}
+        public void GetTeams(bool forceReload = false)
+        {
+            if (forceReload || this.Teams == null)
+            {
+                this.Teams = new Dictionary<int, Team>();
+                GetCountries();
+                GetDrivers();
+                var con = new SqlConnection(CONNECTION_STRING);
+                using (con)
+                {
+                    SqlCommand command = new SqlCommand(
+                      "SELECT * FROM Teams;",
+                      con);
+                    con.Open();
+
+                    SqlDataReader reader = command.ExecuteReader();
+                    while (reader.Read())
+                    {
+                        Team t = new Team(
+                            reader.GetInt32(0),
+                            reader.GetString(1),
+                            reader.GetString(2),
+                            Countries[reader.GetString(3)],
+                            reader.GetString(4),
+                            reader.GetString(5),
+                            reader.GetString(6),
+                            Drivers[reader.GetInt32(7)],
+                            Drivers[reader.GetInt32(8)]
+                        );
+                        this.Teams.Add(t.Id, t);
+                    }
+                    reader.Close();
+                }
+            }
+        }
 
         public void GetCountries()
         {
-            if (this.countries == null)
+            if (this.Countries == null)
             {
-                this.countries = new Dictionary<string, Country>();
+                this.Countries = new Dictionary<string, Country>();
                 var con = new SqlConnection(CONNECTION_STRING);
                 using (con)
                 {
@@ -157,12 +115,8 @@ namespace FormulaOneDll
                     while (reader.Read())
                     {
                         string countryIsoCode = reader.GetString(0);
-                        Country c = new Country()
-                        {
-                            CountryCode = countryIsoCode,
-                            CountryName = reader.GetString(1)
-                        };
-                        this.countries.Add(countryIsoCode, c);
+                        Country c = new Country(countryIsoCode, reader.GetString(1));
+                        this.Countries.Add(countryIsoCode, c);
                     }
                     con.Close();
                     con.Dispose();
@@ -174,9 +128,8 @@ namespace FormulaOneDll
 
         public void GetDrivers(bool forceReload = false)
         {
-            if (forceReload/* || this.countries == null*/)
-                this.GetCountries();
-            if (forceReload || this.drivers == null)
+            this.GetCountries();
+            if (forceReload || this.Drivers == null)
             {
                 this.Drivers = new Dictionary<int, Driver>();
                 var con = new SqlConnection(CONNECTION_STRING);
@@ -193,7 +146,7 @@ namespace FormulaOneDll
                             Firstname = reader.GetString(1),
                             Lastname = reader.GetString(2),
                             Dob = reader.GetDateTime(3),
-                            PlaceOfBirth = reader.GetString(4),
+                            PlaceOfBirthday = reader.GetString(4),
                             Country = Countries[reader.GetString(5)]
                         };
                         this.Drivers.Add(driverIsoCode, d);
@@ -202,53 +155,6 @@ namespace FormulaOneDll
                     con.Dispose();
                 }
                 SqlConnection.ClearAllPools();
-            }
-        }
-
-        public void LoadTeams()
-        {
-            GetCountries();
-            GetDrivers(true);
-            teams = new List<Team>();
-            var con = new SqlConnection($@"Data Source=(LocalDB)\MSSQLLocalDB;AttachDbFilename={WORKINGPATH}FormulaOne.mdf;Integrated Security=True");
-            using (con)
-            {
-                con.Open();
-                var command = new SqlCommand("SELECT * FROM Teams;", con);
-                SqlDataReader reader = command.ExecuteReader();
-                while (reader.Read())
-                {
-                    Team t = new Team()
-                    {
-                        ID = reader.GetInt32(0),
-                        Name = reader.GetString(1),
-                        FullTeamName = reader.GetString(2),
-                        Country = this.Countries[reader.GetString(3)],
-                        PowerUnit = reader.GetString(4),
-                        TechnicalChief = reader.GetString(5),
-                        Chassis = reader.GetString(6),
-                        FirstDriver = this.Drivers[reader.GetInt32(7)],
-                        SecondDriver = this.Drivers[reader.GetInt32(8)]
-                    };
-                    teams.Add(t);
-                }
-                con.Close();
-                con.Dispose();
-            }
-            SqlConnection.ClearAllPools();
-        }
-
-        public bool SerializeToJSON<T>(IEnumerable<T> list, string path)
-        {
-            try
-            {
-                string json = JsonConvert.SerializeObject(list, Formatting.Indented);
-                new StreamWriter(path, false).Write(json);
-                return true;
-            }
-            catch (Exception e)
-            {
-                return false;
             }
         }
     }

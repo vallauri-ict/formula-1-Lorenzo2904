@@ -1,59 +1,67 @@
-﻿using FormulaOneDll;
-using System;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Web;
+using System.Web.UI;
 using System.Web.UI.WebControls;
+using FormulaOneDll;
 
 namespace FormulaOneWebFormProject
 {
     public partial class Default : System.Web.UI.Page
     {
-        protected DbTools db;
-
         protected void Page_Load(object sender, EventArgs e)
         {
-            db = new DbTools();
         }
 
-        protected void btnLoadData_Click(object sender, EventArgs e)
+        protected void btnLoadCountry_Click(object sender, EventArgs e)
         {
-            //db.GetCountries();
-            GridView1.DataSource = db.Countries.Values;
-            GridView1.AutoGenerateSelectButton = false;
+            DbTools db = new DbTools();
+            db.GetCountries();
+            GridView2.DataSource = db.Countries.Values;
+            //GridView1.data
+            GridView2.DataBind();
+        }
+
+        protected void btnLoadTeam_Click(object sender, EventArgs e)
+        {
+            DbTools db = new DbTools();
+            db.GetTeams();
+            GridView1.DataSource = db.Teams.Values;
+            //GridView1.data
             GridView1.DataBind();
         }
 
-        protected void btnLoadDrivers_Click(object sender, EventArgs e)
+        protected void btnLoadDriver_Click(object sender, EventArgs e)
         {
-            GridView1.DataSource = db.Drivers.Values;
-            GridView1.AutoGenerateSelectButton = false;
-            GridView1.DataBind();
+            DbTools db = new DbTools();
+            db.GetDrivers();
+            GridView3.DataSource = db.Drivers.Values;
+            //GridView1.data
+            GridView3.DataBind();
         }
 
-        protected void btnLoadTeams_Click(object sender, EventArgs e)
+        protected void GridView1_RowDataBound(object sender, GridViewRowEventArgs e)
         {
-            GridView1.DataSource = db.Teams;
-            GridView1.AutoGenerateSelectButton = true;
-            GridView1.DataBind();
+            if (e.Row.RowType == DataControlRowType.DataRow)
+            {
+                // Attaching one onclick event for the entire row, so that it will
+                // fire SelectedIndexChanged, while we click anywhere on the row.
+                e.Row.Attributes["onclick"] =
+                  ClientScript.GetPostBackClientHyperlink(this.GridView1, "Select$" + e.Row.RowIndex);
+            }
         }
 
         protected void GridView1_SelectedIndexChanged(object sender, EventArgs e)
         {
-            int id = Convert.ToInt32(GridView1.SelectedRow.Cells[1].Text);
-            Team team = db.Teams.Find(t => t.ID == id);
-            idTeam.Text = team.ID.ToString();
-            nameTeam.Text = team.Name;
-            fullNameTeam.Text = team.FullTeamName;
-            countryTeam.Text = team.Country.CountryName;
-            powerUnitTeam.Text = team.PowerUnit;
-            technicalChiefTeam.Text = team.TechnicalChief;
-            chassisTeam.Text = team.Chassis;
-            nameFirstTeam.Text = team.FirstDriver.ToString();
-            nameSecondDriver.Text = team.SecondDriver.ToString();
-            countryTeam.DataBind();
-            powerUnitTeam.DataBind();
-            technicalChiefTeam.DataBind();
-            chassisTeam.DataBind();
-            nameFirstTeam.DataBind();
-            nameSecondDriver.DataBind();
+            DbTools db = new DbTools();
+            db.GetTeams();
+            GridView table= (GridView)sender;
+            int rowIndex = Convert.ToInt32(table.SelectedRow.Cells[0].Text);
+            GridView2.DataSource = db.Teams[rowIndex].FirstDriver.ToDataTable();
+            GridView2.DataBind();
+            GridView3.DataSource = db.Teams[rowIndex].SecondDriver.ToDataTable();
+            GridView3.DataBind();
         }
     }
 }

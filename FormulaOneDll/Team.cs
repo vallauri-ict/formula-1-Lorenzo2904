@@ -8,7 +8,6 @@ namespace FormulaOneDll
 {
     public class Team
     {
-        #region Attributes
         private int id;
         private string name;
         private string fullTeamName;
@@ -18,15 +17,11 @@ namespace FormulaOneDll
         private string chassis;
         private Driver firstDriver;
         private Driver secondDriver;
-        #endregion
 
-        #region Constructors
-        public Team () { }
-
-        public Team(int id, string nome, string fullTeamName, Country country, string powerUnit, string technicalChief, string chassis, Driver firstDriver, Driver secondDriver)
+        public Team(int id, string name, string fullTeamName, Country country, string powerUnit, string technicalChief, string chassis, Driver firstDriver, Driver secondDriver)
         {
-            this.ID = id;
-            this.Name = nome;
+            this.Id = id;
+            this.Name = name;
             this.FullTeamName = fullTeamName;
             this.Country = country;
             this.PowerUnit = powerUnit;
@@ -35,22 +30,128 @@ namespace FormulaOneDll
             this.FirstDriver = firstDriver;
             this.SecondDriver = secondDriver;
         }
-        #endregion
 
-        #region Properties
-        public int ID { get => id; set => id = value; }
-        public string Name { get => name; set => name = value; }
-        public string FullTeamName { get => fullTeamName; set => fullTeamName = value; }
-        public Country Country { get => country; set => country = value; }
-        public string PowerUnit { get => powerUnit; set => powerUnit = value; }
-        public string TechnicalChief { get => technicalChief; set => technicalChief = value; }
-        public string Chassis { get => chassis; set => chassis = value; }
-        public Driver FirstDriver { get => firstDriver; set => firstDriver = value; }
-        public Driver SecondDriver { get => secondDriver; set => secondDriver = value; }
-        #endregion
+        public int Id
+        {
+            get
+            {
+                return id;
+            }
 
-        #region Methods
-        public override string ToString() => $"{this.Name} ({this.Country.CountryName})";
-        #endregion
+            set
+            {
+                id = value;
+            }
+        }
+
+        public string Name
+        {
+            get
+            {
+                return name;
+            }
+
+            set
+            {
+                name = value;
+            }
+        }
+
+        public string FullTeamName
+        {
+            get
+            {
+                return fullTeamName;
+            }
+
+            set
+            {
+                fullTeamName = value;
+            }
+        }
+
+        public Country Country
+        {
+            get
+            {
+                return country;
+            }
+
+            set
+            {
+                country = value;
+            }
+        }
+
+        public string PowerUnit
+        {
+            get
+            {
+                return powerUnit;
+            }
+
+            set
+            {
+                powerUnit = value;
+            }
+        }
+
+        public string TechnicalChief
+        {
+            get
+            {
+                return technicalChief;
+            }
+
+            set
+            {
+                technicalChief = value;
+            }
+        }
+
+        public string Chassis
+        {
+            get
+            {
+                return chassis;
+            }
+
+            set
+            {
+                chassis = value;
+            }
+        }
+
+        public Driver FirstDriver
+        {
+            get
+            {
+                return firstDriver;
+            }
+
+            set
+            {
+                firstDriver = value;
+            }
+        }
+
+        public Driver SecondDriver
+        {
+            get
+            {
+                return secondDriver;
+            }
+
+            set
+            {
+                secondDriver = value;
+            }
+        }
+
+        public override string ToString()
+        {
+            return this.Name;
+        }
+
     }
 }
