@@ -142,6 +142,8 @@ function creaTabellaCircuits(circuits) {
     for (let i = 0; i < circuits.length; i++) {
         let row = $("<tr>");
         for (let index in circuits[i]) {
+            if (index == "recordLap")
+                continue;
             let cell = $("<td>");
             if (index != "img") {
                 if (index == "country")
