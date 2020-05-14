@@ -94,7 +94,7 @@ function visualizzaDriver(id) {
         info.append(div);
         let p = $(`<p style='text-align: center; margin-bottom: 5px;'><b>Date of Birth</b>: ${dob.split("T")[0]}, ${pob}</p>`);
         info.append(p);
-        p = $(`<p style='text-align: center;'><b>Nazionality</b>: ${naz}</p>`);
+        p = $(`<p style='text-align: center;'><b>Country</b>: ${naz}</p>`);
         info.append(p);
         p = $(`<p><b>Description</b>: ${desc}</p>`);
         info.append(p);
@@ -106,7 +106,7 @@ function creaTabellaTeams(teams) {
     let _table = $("<table>");
     _table.prop("id", "tableData");
     let _thead = $("<thead>");
-    _thead.append("<th>ID</th><th>Brand</th><th>Country</th><th>Logo</th><th>Name</th><th>Surname</th><th>Image</th><th>Infos</th>")
+    _thead.append("<th>ID</th><th>Brand</th><th>Country</th><th>Logo</th><th>First Driver</th><th>Second Driver</th><th>Image</th><th>Infos</th>")
     _table.append(_thead);
     let _tbody = $("<tbody>");
     for (let i = 0; i < teams.length; i++) {
